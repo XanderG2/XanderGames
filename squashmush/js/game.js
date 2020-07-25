@@ -128,12 +128,14 @@ function create() {
     fontSize: "32px",
     fill: "#000",
   });
+  scoreTextTwo = this.add.text(416, 16, "score: 0", {
+    fontSize: "32px",
+    fill: "#000",
+  });
 
   this.physics.add.collider(player, platforms);
   this.physics.add.collider(playerTwo, platforms);
-  this.physics.add.collider(playerTwo, player);
-  //this.physics.add.collider(player, playerTwo);
-  //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
+  this.physics.add.collider(player, playerTwo, smush, null, this);
 }
 
 function update() {
@@ -175,5 +177,30 @@ function update() {
 
   if (wasd.upTwo.isDown && playerTwo.body.touching.down) {
     playerTwo.setVelocityY(-330);
+  }
+}
+function smush(a, b) {
+  const top =
+    a.body.bottom < b.body.bottom
+      ? a
+      : a.body.bottom > b.body.bottom
+      ? b
+      : null;
+  if (!top) {
+    return;
+  }
+  if (top == player) {
+    console.log("1");
+    player.x = 100;
+    playerTwo.y = 450;
+    /*
+    let location1 = TrackEvent.location.of.player.value {
+      set.100
+    };
+    */
+  } else if (top == playerTwo) {
+    console.log("2");
+    playerTwo.x = 700;
+    playerTwo.y = 450;
   }
 }
