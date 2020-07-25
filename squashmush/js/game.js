@@ -24,12 +24,18 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
+var wasd;
 
 var game = new Phaser.Game(config);
+const KeyCodes = Phaser.Input.Keyboard.KeyCodes;
 
 function preload() {
   this.load.image("sky", "assets/sky.png");
   this.load.image("ground", "assets/platform.png");
+  this.load.spritesheet("dudeTwo", "assets/dudeTwo.png", {
+    frameWidth: 32,
+    frameHeight: 48,
+  });
   this.load.spritesheet("dude", "assets/dude.png", {
     frameWidth: 32,
     frameHeight: 48,
@@ -54,10 +60,13 @@ function create() {
 
   // The player and its settings
   player = this.physics.add.sprite(100, 450, "dude");
+  playerTwo = this.physics.add.sprite(100, 450, "dudeTwo");
 
   //  Player physics properties. Give the little guy a slight bounce.
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
+  playerTwo.setBounce(0.2);
+  playerTwo.setCollideWorldBounds(true);
 
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
@@ -79,10 +88,35 @@ function create() {
     frameRate: 10,
     repeat: -1,
   });
+  //playerTwo
+  this.anims.create({
+    key: "left",
+    frames: this.anims.generateFrameNumbers("dudeTwo", { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "turn",
+    frames: [{ key: "dudeTwo", frame: 4 }],
+    frameRate: 20,
+  });
+
+  this.anims.create({
+    key: "right",
+    frames: this.anims.generateFrameNumbers("dudeTwo", { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1,
+  });
 
   //  Input Events
   cursors = this.input.keyboard.createCursorKeys();
-
+  wasd = this.input.keyboard.addKeys({
+    upTwo: KeyCodes.W,
+    downTwo: KeyCodes.S,
+    leftTwo: KeyCodes.A,
+    rightTwo: KeyCodes.D,
+  });
   //  The score
   scoreText = this.add.text(16, 16, "score: 0", {
     fontSize: "32px",
@@ -115,5 +149,23 @@ function update() {
 
   if (cursors.up.isDown && player.body.touching.down) {
     player.setVelocityY(-330);
+  }
+  //playerTwo
+  if (wasd.leftTwo.isDown) {
+    playerTwo.setVelocityX(-160);
+
+    playerTwo.anims.play("left", true);
+  } else if (wasd.rightTwo.isDown) {
+    playerTwo.setVelocityX(160);
+
+    playerTwo.anims.play("right", true);
+  } else {
+    playerTwo.setVelocityX(0);
+
+    playerTwo.anims.play("turn");
+  }
+
+  if (wasd.upTwo.isDown && playerTwo.body.touching.down) {
+    playerTwo.setVelocityY(-330);
   }
 }
