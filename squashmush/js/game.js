@@ -60,7 +60,7 @@ function create() {
 
   // The player and its settings
   player = this.physics.add.sprite(100, 450, "dude");
-  playerTwo = this.physics.add.sprite(100, 450, "dudeTwo");
+  playerTwo = this.physics.add.sprite(700, 450, "dudeTwo");
 
   //  Player physics properties. Give the little guy a slight bounce.
   player.setBounce(0.2);
@@ -72,6 +72,12 @@ function create() {
   this.anims.create({
     key: "left",
     frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1,
+  });
+  this.anims.create({
+    key: "leftTwo",
+    frames: this.anims.generateFrameNumbers("dudeTwo", { start: 0, end: 3 }),
     frameRate: 10,
     repeat: -1,
   });
@@ -90,20 +96,20 @@ function create() {
   });
   //playerTwo
   this.anims.create({
-    key: "left",
+    key: "leftTwo",
     frames: this.anims.generateFrameNumbers("dudeTwo", { start: 0, end: 3 }),
     frameRate: 10,
     repeat: -1,
   });
 
   this.anims.create({
-    key: "turn",
+    key: "turnTwo",
     frames: [{ key: "dudeTwo", frame: 4 }],
     frameRate: 20,
   });
 
   this.anims.create({
-    key: "right",
+    key: "rightTwo",
     frames: this.anims.generateFrameNumbers("dudeTwo", { start: 5, end: 8 }),
     frameRate: 10,
     repeat: -1,
@@ -124,7 +130,9 @@ function create() {
   });
 
   this.physics.add.collider(player, platforms);
-
+  this.physics.add.collider(playerTwo, platforms);
+  this.physics.add.collider(playerTwo, player);
+  //this.physics.add.collider(player, playerTwo);
   //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
 }
 
@@ -154,15 +162,15 @@ function update() {
   if (wasd.leftTwo.isDown) {
     playerTwo.setVelocityX(-160);
 
-    playerTwo.anims.play("left", true);
+    playerTwo.anims.play("leftTwo", true);
   } else if (wasd.rightTwo.isDown) {
     playerTwo.setVelocityX(160);
 
-    playerTwo.anims.play("right", true);
+    playerTwo.anims.play("rightTwo", true);
   } else {
     playerTwo.setVelocityX(0);
 
-    playerTwo.anims.play("turn");
+    playerTwo.anims.play("turnTwo");
   }
 
   if (wasd.upTwo.isDown && playerTwo.body.touching.down) {
