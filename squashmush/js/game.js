@@ -22,8 +22,10 @@ var bombs;
 var platforms;
 var cursors;
 var score = 0;
+var scoreTwo = 0;
 var gameOver = false;
 var scoreText;
+var scoreTextTwo;
 var wasd;
 
 var game = new Phaser.Game(config);
@@ -59,8 +61,9 @@ function create() {
   platforms.create(750, 220, "ground");
 
   // The player and its settings
-  player = this.physics.add.sprite(100, 450, "dude");
-  playerTwo = this.physics.add.sprite(700, 450, "dudeTwo");
+  playerTwo = this.physics.add.sprite(100, 450, "dude");
+  player = this.physics.add.sprite(700, 450, "dudeTwo");
+  //setzize.of player == 1 1;
 
   //  Player physics properties. Give the little guy a slight bounce.
   player.setBounce(0.2);
@@ -124,11 +127,11 @@ function create() {
     rightTwo: KeyCodes.D,
   });
   //  The score
-  scoreText = this.add.text(16, 16, "score: 0", {
+  scoreTextTwo = this.add.text(16, 16, "P2 score: 0", {
     fontSize: "32px",
     fill: "#000",
   });
-  scoreTextTwo = this.add.text(416, 16, "score: 0", {
+  scoreText = this.add.text(416, 16, "P1 score: 0", {
     fontSize: "32px",
     fill: "#000",
   });
@@ -190,8 +193,15 @@ function smush(a, b) {
     return;
   }
   if (top == player) {
-    console.log("1");
+    score += 1;
+    if (score == 5) {
+      alert("P1 Wins");
+      let score = 0;
+    }
+    scoreText.setText("P1 Score: " + score);
     player.x = 100;
+    player.y = 450;
+    playerTwo.x = 700;
     playerTwo.y = 450;
     /*
     let location1 = TrackEvent.location.of.player.value {
@@ -199,8 +209,15 @@ function smush(a, b) {
     };
     */
   } else if (top == playerTwo) {
-    console.log("2");
-    playerTwo.x = 700;
+    scoreTwo += 1;
+    if (scoreTwo == 5) {
+      alert("P2 Wins");
+      let scoreTwo = 0;
+    }
+    scoreTextTwo.setText("P2 Score: " + scoreTwo);
+    player.x = 700;
+    player.y = 450;
+    playerTwo.x = 100;
     playerTwo.y = 450;
   }
 }
